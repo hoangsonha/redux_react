@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { store } from "../src/redux/store";
+import { increaseCount, decreaseCount } from "./redux/actions";
+import { useState } from "react";
 
 function App() {
+  console.log(store.getState());
+
+  const [n, setn] = useState(store.getState());
+
+  const handleIncrease = () => {
+    store.dispatch(increaseCount(10));
+    setn(store.getState());
+  };
+
+  const handleDecrease = () => {
+    store.dispatch(decreaseCount(10));
+    setn(store.getState());
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{n}</h1>
+      <button onClick={handleIncrease}>Increase</button>
+      <button onClick={handleDecrease}>Decrease</button>
     </div>
   );
 }
