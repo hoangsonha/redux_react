@@ -4,7 +4,6 @@ const init = 0;
 
 export const countReducer = (state = init, action) => {
   console.log(state);
-
   switch (action.type) {
     case Types.increase:
       return state + action.payload;
