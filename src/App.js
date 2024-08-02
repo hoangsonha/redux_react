@@ -1,5 +1,3 @@
-import logo from "./logo.svg";
-import "./App.css";
 import { stores } from "./redux/stores";
 import {
   actionIncrease,
