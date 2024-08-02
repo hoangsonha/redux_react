@@ -6,11 +6,19 @@ import {
   actionRemoveToDo,
 } from "./redux/actions";
 import { store } from "./redux/store";
+import { search } from "./serviceAPI/searchAPI";
 
 function App() {
   const [count, setCount] = useState(store.getState().countReducer);
   const [todoValue, setTodoValue] = useState("");
   const [todos, setTodos] = useState(store.getState().todoReducer);
+
+  const fetchAPI = async () => {
+    const result = await search("hoa");
+    console.log(result);
+  };
+
+  fetchAPI();
 
   const handleIncrease = () => {
     store.dispatch(actionIncrease(10));
