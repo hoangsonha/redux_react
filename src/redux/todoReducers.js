@@ -3,7 +3,6 @@ import { Types } from "./Types";
 const init = [];
 
 export const todoReducers = (state = init, action) => {
-  console.log(state);
   switch (action.type) {
     case Types.addToDo:
       return [...state, action.payload];

@@ -6,8 +6,10 @@ import {
   actionDecrease,
   actionAddToDo,
   actionRemoveToDo,
+  actionAddToDoAsync,
 } from "./redux/actions";
 import { useState } from "react";
+import axios from "axios";
 
 function App() {
   const [n, setN] = useState(stores.getState().countReducer);
@@ -15,8 +17,6 @@ function App() {
   const [a, setA] = useState("");
 
   const [todo, setTodo] = useState(stores.getState().todoReducer);
-
-  console.log(todo);
 
   const handleIncrease = () => {
     stores.dispatch(actionIncrease(10));
@@ -28,13 +28,22 @@ function App() {
     setN(stores.getState().countReducer);
   };
 
+  //
+  // const fetchToDo = async () => {
+  //   const res = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+  //   stores.dispatch(
+  //     actionAddToDo({
+  //       name: res.data.title,
+  //       id: res.data.id,
+  //     })
+  //   );
+  // };
+
   const handleActionToDo = () => {
-    stores.dispatch(
-      actionAddToDo({
-        name: a,
-        id: Math.random(),
-      })
-    );
+    // fetchToDo();
+
+    actionAddToDoAsync();
+
     setTodo(stores.getState().todoReducer);
     setA("");
   };

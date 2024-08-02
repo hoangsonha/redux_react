@@ -1,4 +1,6 @@
 import { Types } from "./Types";
+import axios from "axios";
+import { stores } from "./stores";
 
 export const actionIncrease = (data) => {
   return {
@@ -19,6 +21,16 @@ export const actionAddToDo = (data) => {
     type: Types.addToDo,
     payload: data,
   };
+};
+
+export const actionAddToDoAsync = async () => {
+  const res = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+  stores.dispatch(
+    actionAddToDo({
+      name: res.data.title,
+      id: res.data.id,
+    })
+  );
 };
 
 export const actionRemoveToDo = (data) => {
