@@ -1,76 +1,62 @@
-import { stores } from "./redux/stores";
+import { useState } from "react";
 import {
   actionIncrease,
   actionDecrease,
   actionAddToDo,
   actionRemoveToDo,
-  actionAddToDoAsync,
 } from "./redux/actions";
-import { useState } from "react";
-import axios from "axios";
+import { store } from "./redux/store";
 
 function App() {
-  const [n, setN] = useState(stores.getState().countReducer);
-
-  const [a, setA] = useState("");
-
-  const [todo, setTodo] = useState(stores.getState().todoReducer);
+  const [count, setCount] = useState(store.getState().countReducer);
+  const [todoValue, setTodoValue] = useState("");
+  const [todos, setTodos] = useState(store.getState().todoReducer);
 
   const handleIncrease = () => {
-    stores.dispatch(actionIncrease(10));
-    setN(stores.getState().countReducer);
+    store.dispatch(actionIncrease(10));
+    setCount(store.getState().countReducer);
   };
 
   const handleDecrease = () => {
-    stores.dispatch(actionDecrease(10));
-    setN(stores.getState().countReducer);
+    store.dispatch(actionDecrease(10));
+    setCount(store.getState().countReducer);
   };
 
-  //
-  // const fetchToDo = async () => {
-  //   const res = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
-  //   stores.dispatch(
-  //     actionAddToDo({
-  //       name: res.data.title,
-  //       id: res.data.id,
-  //     })
-  //   );
-  // };
-
-  const handleActionToDo = () => {
-    // fetchToDo();
-
-    actionAddToDoAsync();
-
-    setTodo(stores.getState().todoReducer);
-    setA("");
+  const handleToDoValue = (e) => {
+    setTodoValue(e.target.value);
   };
 
-  const handleDelete = (to) => {
-    console.log("Clicked handleDlele");
-    stores.dispatch(actionRemoveToDo(to));
-    setTodo(stores.getState().todoReducer);
+  const handleToDo = () => {
+    store.dispatch(
+      actionAddToDo({
+        name: todoValue,
+        id: Math.random(),
+      })
+    );
+    setTodoValue("");
+    setTodos(store.getState().todoReducer);
   };
 
-  const handleTodo = (e) => {
-    setA(e.target.value);
+  const handleDelete = (todo) => {
+    store.dispatch(actionRemoveToDo(todo));
+    setTodos(store.getState().todoReducer);
   };
 
   return (
     <div className="App">
-      <h1>{n}</h1>
+      <h1>{count}</h1>
       <button onClick={handleIncrease}>Increase</button>
       <button onClick={handleDecrease}>Decrease</button>
 
       <div>
-        <input type="text" value={a} onChange={handleTodo} />
-        <button onClick={handleActionToDo}>Add Todo</button>
+        <input type="text" value={todoValue} onChange={handleToDoValue} />
+        <button onClick={handleToDo}>Add ToDo</button>
       </div>
-      {todo.map((to) => {
+      {todos.map((todo) => {
         return (
-          <div>
-            {to.name} <span onClick={() => handleDelete(to)}>Xoa</span>
-          </div>
+          <li>
+            {todo.name} <span onClick={() => handleDelete(todo)}>Delete</span>
+          </li>
         );
       })}
     </div>
