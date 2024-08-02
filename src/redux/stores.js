@@ -3,11 +3,20 @@ import { countReducers } from "./countReducers";
 import { todoReducers } from "./todoReducers";
 
 import { thunk } from "redux-thunk";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
   countReducer: countReducers,
   todoReducer: todoReducers,
 });
+
+const persisConfig = {
+  key: "root",
+  storage,
+  whitelist: ["countReducer", "todoReducer"],
+  blacklist: [],
+};
 
 // const middleware = (store) => {
 //     return (next) => {
@@ -44,7 +53,19 @@ const middleware1 = (store) => (next) => (action) => {
 
 // k có next(action) ở 1 trong 3 là sẽ k qua đc reducer
 
-export const stores = createStore(rootReducer, applyMiddleware(thunk));
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+  trace: true,
+  traceLimit: 25,
+});
+
+const persistedReducer = persistReducer(persisConfig, rootReducer);
+
+export const stores = createStore(
+  persistedReducer,
+  composeEnhancer(applyMiddleware(thunk))
+);
+
+export const persistor = persistStore(stores);
 
 // export const stores = createStore(
 //     rootReducer,
