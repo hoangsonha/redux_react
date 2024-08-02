@@ -1,22 +1,52 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { store } from "../src/redux/store";
-import { increaseCount, decreaseCount } from "./redux/actions";
+import { stores } from "./redux/stores";
+import {
+  actionIncrease,
+  actionDecrease,
+  actionAddToDo,
+  actionRemoveToDo,
+} from "./redux/actions";
 import { useState } from "react";
 
 function App() {
-  console.log(store.getState());
+  const [n, setN] = useState(stores.getState().countReducer);
 
-  const [n, setn] = useState(store.getState());
+  const [a, setA] = useState("");
+
+  const [todo, setTodo] = useState(stores.getState().todoReducer);
+
+  console.log(todo);
 
   const handleIncrease = () => {
-    store.dispatch(increaseCount(10));
-    setn(store.getState());
+    stores.dispatch(actionIncrease(10));
+    setN(stores.getState().countReducer);
   };
 
   const handleDecrease = () => {
-    store.dispatch(decreaseCount(10));
-    setn(store.getState());
+    stores.dispatch(actionDecrease(10));
+    setN(stores.getState().countReducer);
+  };
+
+  const handleActionToDo = () => {
+    stores.dispatch(
+      actionAddToDo({
+        name: a,
+        id: Math.random(),
+      })
+    );
+    setTodo(stores.getState().todoReducer);
+    setA("");
+  };
+
+  const handleDelete = (to) => {
+    console.log("Clicked handleDlele");
+    stores.dispatch(actionRemoveToDo(to));
+    setTodo(stores.getState().todoReducer);
+  };
+
+  const handleTodo = (e) => {
+    setA(e.target.value);
   };
 
   return (
@@ -24,6 +54,18 @@ function App() {
       <h1>{n}</h1>
       <button onClick={handleIncrease}>Increase</button>
       <button onClick={handleDecrease}>Decrease</button>
+
+      <div>
+        <input type="text" value={a} onChange={handleTodo} />
+        <button onClick={handleActionToDo}>Add Todo</button>
+      </div>
+      {todo.map((to) => {
+        return (
+          <div>
+            {to.name} <span onClick={() => handleDelete(to)}>Xoa</span>
+          </div>
+        );
+      })}
     </div>
   );
 }

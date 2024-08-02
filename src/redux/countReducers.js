@@ -2,8 +2,7 @@ import { Types } from "./Types";
 
 const init = 0;
 
-export const countReducer = (state = init, action) => {
-  console.log(state);
+export const countReducers = (state = init, action) => {
   switch (action.type) {
     case Types.increase:
       return state + action.payload;
