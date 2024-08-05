@@ -1,7 +1,6 @@
 import { Types } from "./Types";
 
 const init = 0;
-
 export const countReducer = (state = init, action) => {
   switch (action.type) {
     case Types.increase:

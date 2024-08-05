@@ -2,68 +2,60 @@ import { useState } from "react";
 import {
   actionIncrease,
   actionDecrease,
-  actionAddToDo,
-  actionRemoveToDo,
+  actionAdd,
+  actionRemove,
 } from "./redux/actions";
 import { store } from "./redux/store";
-import { search } from "./serviceAPI/searchAPI";
 
 function App() {
-  const [count, setCount] = useState(store.getState().countReducer);
-  const [todoValue, setTodoValue] = useState("");
+  const [state, setState] = useState(store.getState().countReducer);
+  const [text, setText] = useState("");
   const [todos, setTodos] = useState(store.getState().todoReducer);
-
-  const fetchAPI = async () => {
-    const result = await search("hoa");
-    console.log(result);
-  };
-
-  fetchAPI();
 
   const handleIncrease = () => {
     store.dispatch(actionIncrease(10));
-    setCount(store.getState().countReducer);
+    setState(store.getState().countReducer);
   };
 
   const handleDecrease = () => {
     store.dispatch(actionDecrease(10));
-    setCount(store.getState().countReducer);
+    setState(store.getState().countReducer);
   };
 
-  const handleToDoValue = (e) => {
-    setTodoValue(e.target.value);
+  const handleText = (e) => {
+    setText(e.target.value);
   };
 
-  const handleToDo = () => {
+  const handleAdd = () => {
     store.dispatch(
-      actionAddToDo({
-        name: todoValue,
+      actionAdd({
+        name: text,
         id: Math.random(),
       })
     );
-    setTodoValue("");
     setTodos(store.getState().todoReducer);
+    setText("");
   };
 
-  const handleDelete = (todo) => {
-    store.dispatch(actionRemoveToDo(todo));
+  const handleRemove = (todo) => {
+    store.dispatch(actionRemove(todo));
     setTodos(store.getState().todoReducer);
   };
 
   return (
     <div className="App">
-      <h1>{count}</h1>
+      <h1>{state}</h1>
       <button onClick={handleIncrease}>Increase</button>
       <button onClick={handleDecrease}>Decrease</button>
-
       <div>
-        <input type="text" value={todoValue} onChange={handleToDoValue} />
-        <button onClick={handleToDo}>Add ToDo</button>
+        <h1>ToDo</h1>
+        <input type="text" value={text} onChange={handleText} />
+        <button onClick={handleAdd}>AddToDO</button>
       </div>
       {todos.map((todo) => {
         return (
           <li>
-            {todo.name} <span onClick={() => handleDelete(todo)}>Delete</span>
+            {todo.name} <span onClick={() => handleRemove(todo)}>Xoa</span>
           </li>
         );
       })}

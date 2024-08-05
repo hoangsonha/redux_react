@@ -4,10 +4,10 @@ const init = [];
 
 export const todoReducer = (state = init, action) => {
   switch (action.type) {
-    case Types.addToDo:
+    case Types.todoAdd:
       return [...state, action.payload];
-    case Types.removeToDo:
-      return state.filter((st) => st.id !== action.payload.id);
+    case Types.todoRemove:
+      return state.filter((todo) => todo.id !== action.payload.id);
     default:
       return state;
   }

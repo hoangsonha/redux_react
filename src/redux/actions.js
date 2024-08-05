@@ -14,16 +14,16 @@ export const actionDecrease = (data) => {
   };
 };
 
-export const actionAddToDo = (data) => {
+export const actionAdd = (data) => {
   return {
-    type: Types.addToDo,
+    type: Types.todoAdd,
     payload: data,
   };
 };
 
-export const actionRemoveToDo = (data) => {
+export const actionRemove = (data) => {
   return {
-    type: Types.removeToDo,
+    type: Types.todoRemove,
     payload: data,
   };
 };

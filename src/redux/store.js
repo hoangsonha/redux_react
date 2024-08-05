@@ -1,23 +1,24 @@
-import { combineReducers, createStore, applyMiddleware } from "redux";
+import { applyMiddleware, combineReducers, createStore } from "redux";
 import { countReducer } from "./countReducer";
 import { todoReducer } from "./todoReducer";
-import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
-  countReducer: countReducer,
-  todoReducer: todoReducer,
+  countReducer,
+  todoReducer,
 });
 
-const persisConfig = {
+const config = {
   key: "root",
   storage,
-  whitelist: ["countReducer", "todoReducer"],
-  blacklist: [],
+  whiteList: [],
+  blackList: [],
 };
 
-const midleware1 = (store) => (next) => (action) => {
-  if (action.payload?.name?.includes("aaa") && action.type === "ADDTODO") {
+const middleaware = (store) => (next) => (action) => {
+  console.log("no");
+  if (action.type === "ADDTODO" && action.payload.name.includes("aaa")) {
     next({
       type: action.type,
       payload: {
@@ -30,16 +31,25 @@ const midleware1 = (store) => (next) => (action) => {
   }
 };
 
-const reduxExtension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-  trase: true,
+const middleaware2 = (store) => (next) => (action) => {
+  console.log("yes");
+  if (action.type === "REMOVETODO" && action.payload.name.includes("aaa")) {
+    console.log("yesNo?");
+  } else {
+    next(action);
+  }
+};
+
+const pr = persistReducer(config, rootReducer);
+
+const s = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+  trace: true,
   traceLimit: 25,
 });
 
-const persistedReducer = persistReducer(persisConfig, rootReducer);
-
 export const store = createStore(
-  persistedReducer,
-  reduxExtension(applyMiddleware(midleware1))
+  pr,
+  s(applyMiddleware(middleaware, middleaware2))
 );
 
-export const persistor = persistStore(store);
+export const sto = persistStore(store);
